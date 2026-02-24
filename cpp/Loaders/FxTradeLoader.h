@@ -1,15 +1,21 @@
 #ifndef FXTRADELOADER_H
 #define FXTRADELOADER_H
 
+#include <memory>
 #include <string>
 #include <vector>
 
 #include "../Models/FxTrade.h"
+#include "../Models/FxTradeList.h"
 #include "ITradeLoader.h"
 
 class FxTradeLoader : public ITradeLoader {
 private:
+    static constexpr char separator[] = "¬";
     std::string dataFile_;
+
+    FxTrade* createTradeFromLine(std::string line);
+    void loadTradesFromFile(std::string filename, FxTradeList& tradeList);
 
 public:
     // NOTE: These methods are only here to allow the solution to compile prior

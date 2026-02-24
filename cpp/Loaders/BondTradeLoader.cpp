@@ -1,4 +1,5 @@
 #include "BondTradeLoader.h"
+#include "LoaderUtils.h"
 
 #include <chrono>
 #include <ctime>
@@ -6,21 +7,6 @@
 #include <iomanip>
 #include <sstream>
 #include <stdexcept>
-
-//
-//
-#include <algorithm>
-#include <cctype>
-
-// TODO: maybe this cuold be in a utils file
-static inline std::string trim(const std::string& s)
-{
-    auto start = std::find_if_not(s.begin(), s.end(), ::isspace);
-    auto end = std::find_if_not(s.rbegin(), s.rend(), ::isspace).base();
-    if (start >= end)
-        return "";
-    return std::string(start, end);
-}
 
 BondTrade* BondTradeLoader::createTradeFromLine(std::string line)
 {

@@ -20,6 +20,7 @@ add_library(Loaders
     Loaders/BondTradeLoader.cpp
     Loaders/FxTradeLoader.h
     Loaders/FxTradeLoader.cpp
+    Loaders/LoaderUtils.h
 )
 
 target_include_directories(Loaders PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

@@ -7,10 +7,10 @@
 
 int main()
 {
-    TestRunner::runAll();
+    // TestRunner::runAll();
 
-    BondTradeLoader loader;
-    loader.setDataFile("Loaders/TradeData/BondTrades.dat");
+    FxTradeLoader loader;
+    loader.setDataFile("Loaders/TradeData/FxTrades.dat");
     auto trades = loader.loadTrades();
     for (auto t : trades) {
         std::cout << "start 12345 '" << t->getTradeId() << "' end 12345"
