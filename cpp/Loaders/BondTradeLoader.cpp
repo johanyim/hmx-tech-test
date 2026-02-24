@@ -34,7 +34,8 @@ BondTrade* BondTradeLoader::createTradeFromLine(std::string line) {
         throw std::runtime_error("Invalid line format");
     }
 
-    BondTrade* trade = new BondTrade(items[6]);
+    // missing argument
+    BondTrade* trade = new BondTrade(items[6], items[0]);
 
     std::tm tm = {};
     std::istringstream dateStream(items[1]);
