@@ -1,13 +1,14 @@
 #ifndef SCALARRESULTS_H
 #define SCALARRESULTS_H
 
-#include "IScalarResultReceiver.h"
-#include "ScalarResult.h"
+#include <iterator>
 #include <map>
-#include <vector>
 #include <optional>
 #include <string>
-#include <iterator>
+#include <vector>
+
+#include "IScalarResultReceiver.h"
+#include "ScalarResult.h"
 
 class ScalarResults : public IScalarResultReceiver {
 public:
@@ -18,7 +19,8 @@ public:
 
     virtual void addResult(const std::string& tradeId, double result) override;
 
-    virtual void addError(const std::string& tradeId, const std::string& error) override;
+    virtual void addError(
+        const std::string& tradeId, const std::string& error) override;
 
     class Iterator {
     public:

@@ -5,7 +5,8 @@
 #include "ScalarResultsTests.cpp"
 #include "TestFramework.h"
 
-int main() {
+int main()
+{
     TestRunner::runAll();
 
     BondTradeLoader loader;

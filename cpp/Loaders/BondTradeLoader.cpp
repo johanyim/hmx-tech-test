@@ -13,14 +13,17 @@
 #include <cctype>
 
 // TODO: maybe this cuold be in a utils file
-static inline std::string trim(const std::string& s) {
+static inline std::string trim(const std::string& s)
+{
     auto start = std::find_if_not(s.begin(), s.end(), ::isspace);
     auto end = std::find_if_not(s.rbegin(), s.rend(), ::isspace).base();
-    if (start >= end) return "";
+    if (start >= end)
+        return "";
     return std::string(start, end);
 }
 
-BondTrade* BondTradeLoader::createTradeFromLine(std::string line) {
+BondTrade* BondTradeLoader::createTradeFromLine(std::string line)
+{
     std::vector<std::string> items;
     std::istringstream record_stream(line);
     std::string item;
@@ -52,8 +55,9 @@ BondTrade* BondTradeLoader::createTradeFromLine(std::string line) {
     return trade;
 }
 
-void BondTradeLoader::loadTradesFromFile(std::string filename,
-                                         BondTradeList& tradeList) {
+void BondTradeLoader::loadTradesFromFile(
+    std::string filename, BondTradeList& tradeList)
+{
     if (filename.empty()) {
         throw std::invalid_argument("Filename cannot be null");
     }
@@ -74,7 +78,8 @@ void BondTradeLoader::loadTradesFromFile(std::string filename,
     }
 }
 
-std::vector<ITrade*> BondTradeLoader::loadTrades() {
+std::vector<ITrade*> BondTradeLoader::loadTrades()
+{
     BondTradeList tradeList;
     loadTradesFromFile(dataFile_, tradeList);
 

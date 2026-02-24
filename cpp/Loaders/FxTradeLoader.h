@@ -1,17 +1,19 @@
 #ifndef FXTRADELOADER_H
 #define FXTRADELOADER_H
 
-#include "ITradeLoader.h"
-#include "../Models/FxTrade.h"
 #include <string>
 #include <vector>
+
+#include "../Models/FxTrade.h"
+#include "ITradeLoader.h"
 
 class FxTradeLoader : public ITradeLoader {
 private:
     std::string dataFile_;
-    
+
 public:
-    // NOTE: These methods are only here to allow the solution to compile prior to the test being completed.
+    // NOTE: These methods are only here to allow the solution to compile prior
+    // to the test being completed.
     std::vector<ITrade*> loadTrades() override;
     std::string getDataFile() const override;
     void setDataFile(const std::string& file) override;

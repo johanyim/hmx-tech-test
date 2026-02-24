@@ -1,9 +1,10 @@
 #ifndef ITRADELOADER_H
 #define ITRADELOADER_H
 
-#include "../Models/ITrade.h"
-#include <vector>
 #include <string>
+#include <vector>
+
+#include "../Models/ITrade.h"
 
 class ITradeLoader {
 public:

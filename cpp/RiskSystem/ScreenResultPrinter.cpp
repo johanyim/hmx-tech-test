@@ -1,7 +1,8 @@
 #include "ScreenResultPrinter.h"
 #include <iostream>
 
-void ScreenResultPrinter::printResults(ScalarResults& results) {
+void ScreenResultPrinter::printResults(ScalarResults& results)
+{
     for (const auto& result : results) {
         // Write code here to print out the results such that we have:
         // TradeID : Result : Error
