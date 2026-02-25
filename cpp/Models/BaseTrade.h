@@ -2,6 +2,7 @@
 #define BASETRADE_H
 
 #include <chrono>
+#include <iostream>
 #include <string>
 
 #include "ITrade.h"
@@ -9,6 +10,17 @@
 class BaseTrade : public ITrade {
 public:
     BaseTrade() = default;
+
+    // declaring this as explicit to prevent implicit type conversion
+    // Mybae we could use the templating/trait bound thing from before
+    explicit BaseTrade(std::string tradeId)
+        : tradeId_(std::move(tradeId))
+    {
+        // std::cout << "BaseTrade with tradeId" << '\n';
+    }
+
+    BaseTrade(const BaseTrade&) { std::cout << "BaseTrade copied" << '\n'; }
+
     virtual ~BaseTrade() = default;
 
     std::chrono::system_clock::time_point getTradeDate() const override

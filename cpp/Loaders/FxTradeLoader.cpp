@@ -27,7 +27,7 @@ FxTrade* FxTradeLoader::createTradeFromLine(std::string line)
     }
 
     // missing argument
-    FxTrade* trade = new FxTrade(items[6], items[0]);
+    // FxTrade* trade = new FxTrade(items[6], items[0]);
 
     // std::tm tm = {};
     // std::istringstream dateStream(items[1]);
@@ -42,7 +42,7 @@ FxTrade* FxTradeLoader::createTradeFromLine(std::string line)
     // trade->setNotional(std::stod(items[4]));
     // trade->setRate(std::stod(items[5]));
 
-    FxTrade* new_trade = new FxTrade {};
+    FxTrade* new_trade = new FxTrade(items[6], "thing");
     return new_trade;
 }
 

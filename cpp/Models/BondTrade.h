@@ -22,6 +22,16 @@ public:
         tradeId_ = tradeId;
     }
 
+    // // templated forwarding
+    // template <typename S1, typename S2>
+    // BondTrade(S1&& tradeId, S2&& tradeType)
+    //     : tradeType_(std::forward<S2>(tradeType))
+    // {
+    //     if (!tradeId.empty()) {
+    //         tradeId_(std::forward<S1>(tradeId));
+    //     }
+    // }
+
     std::string getTradeType() const override { return tradeType_; }
 
 private:
