@@ -21,7 +21,7 @@ public:
     // }
 
     // templated forwarding (similar to rust-like trait bounds)
-    // allows selecting l/rv values
+    // allows selecting l/r values
     template <typename S1, typename S2>
         requires std::constructible_from<std::string, S1&&>
                      && std::constructible_from<std::string, S2&&>

@@ -17,33 +17,35 @@ FxTrade* FxTradeLoader::createTradeFromLine(std::string line)
     // using a custom split function
     std::vector<std::string> items = split(line, separator);
 
-    for (std::string item : items) {
-        std::cout << item << ',';
-    }
-    std::cout << '\n';
-
     if (items.size() < 7) {
         throw std::runtime_error("Invalid line format");
     }
 
     // missing argument
-    // FxTrade* trade = new FxTrade(items[6], items[0]);
+    FxTrade* trade = new FxTrade(items[6], items[0]);
 
-    // std::tm tm = {};
-    // std::istringstream dateStream(items[1]);
-    // dateStream >> std::get_time(&tm, "%Y-%m-%d");
-    // auto timePoint =
-    // std::chrono::system_clock::from_time_t(std::mktime(&tm));
-    //
-    // trade->setTradeDate(timePoint);
-    //
-    // trade->setInstrument(items[2]);
-    // trade->setCounterparty(items[3]);
-    // trade->setNotional(std::stod(items[4]));
-    // trade->setRate(std::stod(items[5]));
+    std::tm tm = {};
+    std::istringstream dateStream(items[1]);
+    dateStream >> std::get_time(&tm, "%Y-%m-%d");
+    auto timePoint = std::chrono::system_clock::from_time_t(std::mktime(&tm));
 
-    FxTrade* new_trade = new FxTrade(items[6], "thing");
-    return new_trade;
+    trade->setTradeDate(timePoint);
+
+    trade->setInstrument(items[2] + items[3]);
+    trade->setCounterparty(items[7]);
+    trade->setNotional(std::stod(items[4]));
+    trade->setRate(std::stod(items[5]));
+
+    std::tm vdBuf = {};
+    std::istringstream valueDateStream(items[6]);
+    valueDateStream >> std::get_time(&vdBuf, "%Y-%m-%d");
+
+    auto valueDate
+        = std::chrono::system_clock::from_time_t(std::mktime(&vdBuf));
+
+    trade->setValueDate(valueDate);
+
+    return trade;
 }
 
 void FxTradeLoader::loadTradesFromFile(
@@ -58,10 +60,12 @@ void FxTradeLoader::loadTradesFromFile(
         throw std::runtime_error("Cannot open file: " + filename);
     }
 
+    // TODO: skipping lines might need a conditional?
     int lineCount = 0;
     std::string line;
     while (std::getline(stream, line)) {
-        if (lineCount == 0) {
+        // if (lineCount < 2) {
+        if (lineCount < 2 || lineCount > 5) {
         } else {
             tradeList.add(createTradeFromLine(line));
         }

@@ -20,12 +20,14 @@ inline std::string trim(const std::string& s)
 inline std::vector<std::string> split(
     const std::string& s, const std::string& delimiter)
 {
+
     std::vector<std::string> tokens;
     size_t start = 0;
     size_t pos;
 
     while ((pos = s.find(delimiter, start)) != std::string::npos) {
-        tokens.push_back(s.substr(start, pos - start));
+        // WARN: perhaps there could be an occasion to not trim?
+        tokens.push_back(trim(s.substr(start, pos - start)));
         start = pos + delimiter.length();
     }
 
