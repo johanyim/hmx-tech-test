@@ -18,6 +18,13 @@ add_library(Models STATIC
 
 target_include_directories(Models PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
+
+add_library(third-party STATIC
+    third-party/pugixml.cpp
+)
+
+target_include_directories(third-party PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/third-party)
+
 # Loaders library
 add_library(Loaders
     Loaders/ITradeLoader.h
@@ -62,7 +69,7 @@ add_library(RiskSystem
 )
 
 target_include_directories(RiskSystem PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(RiskSystem Models Loaders Pricers)
+target_link_libraries(RiskSystem Models Loaders Pricers third-party)
 
 # Find and link threading library (required for Exercise 8)
 find_package(Threads REQUIRED)
