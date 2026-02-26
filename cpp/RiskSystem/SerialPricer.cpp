@@ -10,13 +10,13 @@
 
 void SerialPricer::loadPricers()
 {
+#define REGISTER_PRICER(Type)                                                  \
+    pricers_.emplace(                                                          \
+        "HmxLabs.TechTest.Pricers." #Type, std::make_unique<Type>())
 
-    pricers_.insert({ "HmxLabs.TechTest.Pricers.GovBondPricingEngine",
-        std::make_unique<GovBondPricingEngine>() });
-    pricers_.insert({ "HmxLabs.TechTest.Pricers.CorpBondPricingEngine",
-        std::make_unique<CorpBondPricingEngine>() });
-    pricers_.insert({ "HmxLabs.TechTest.Pricers.FxPricingEngine",
-        std::make_unique<FxPricingEngine>() });
+    REGISTER_PRICER(GovBondPricingEngine);
+    REGISTER_PRICER(CorpBondPricingEngine);
+    REGISTER_PRICER(FxPricingEngine);
 
     PricingConfigLoader pricingConfigLoader;
     pricingConfigLoader.setConfigFile("./PricingConfig/PricingEngines.xml");
