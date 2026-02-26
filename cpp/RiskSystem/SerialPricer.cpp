@@ -1,10 +1,23 @@
 #include "SerialPricer.h"
+#include "Pricers/CorpBondPricingEngine.h"
+#include "Pricers/FxPricingEngine.h"
+#include "Pricers/GovBondPricingEngine.h"
+#include <memory>
 #include <stdexcept>
 
-SerialPricer::~SerialPricer() { }
+// NOTE: No need forthis as the unique_ptr will automatically cleanup
+// SerialPricer::~SerialPricer() { }
 
 void SerialPricer::loadPricers()
 {
+
+    pricers_.insert({ "HmxLabs.TechTest.Pricers.GovBondPricingEngine",
+        std::make_unique<GovBondPricingEngine>() });
+    pricers_.insert({ "HmxLabs.TechTest.Pricers.CorpBondPricingEngine",
+        std::make_unique<CorpBondPricingEngine>() });
+    pricers_.insert({ "HmxLabs.TechTest.Pricers.FxPricingEngine",
+        std::make_unique<FxPricingEngine>() });
+
     PricingConfigLoader pricingConfigLoader;
     pricingConfigLoader.setConfigFile("./PricingConfig/PricingEngines.xml");
     PricingEngineConfig pricerConfig = pricingConfigLoader.loadConfig();
@@ -29,7 +42,7 @@ void SerialPricer::price(
                 continue;
             }
 
-            IPricingEngine* pricer = pricers_[tradeType];
+            IPricingEngine* pricer = pricers_[tradeType].get();
             pricer->price(trade, resultReceiver);
         }
     }
