@@ -1,23 +1,46 @@
 #include "PricingConfigLoader.h"
 #include "RiskSystem/PricingEngineConfig.h"
+#include "RiskSystem/PricingEngineConfigItem.h"
+#include "pugixml.cpp"
 #include "third-party/pugixml.hpp"
 
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
+#include <vector>
 
-PricingEngineConfig parseXml(const std::string& content)
+PricingEngineConfig PricingConfigLoader::parseXml(const std::string& content)
 {
     pugi::xml_document doc;
     pugi::xml_parse_result result = doc.load_string(content.c_str());
     if (!result) {
         std::cerr << "Invalid XML: " << result.description() << '\n';
+        throw std::runtime_error(result.description());
     }
 
-    std::cout << "Managed to Parse" << "\n";
+    pugi::xml_node root = doc.document_element();
 
-    return PricingEngineConfig();
+    std::vector<PricingEngineConfigItem> items {};
+
+    for (auto child : root.children()) {
+        // <Engine tradeType="FxSpot" assembly="HmxLabs.TechTest.Pricers"
+        // pricingEngine="HmxLabs.TechTest.Pricers.FxPricingEngine" />
+
+        const char* tradeType = child.attribute("tradeType").as_string();
+        const char* assembly = child.attribute("assembly").as_string();
+        const char* typeName = child.attribute("pricingEngine").as_string();
+
+        PricingEngineConfigItem item;
+        item.setTradeType(tradeType);
+        item.setAssembly(assembly);
+        item.setTypeName(typeName);
+        items.push_back(item);
+    }
+
+    PricingEngineConfig config(items);
+
+    return config;
 }
 
 std::string PricingConfigLoader::getConfigFile() const { return configFile_; }
@@ -38,6 +61,7 @@ PricingEngineConfig PricingConfigLoader::loadConfig()
     std::string file_str = std::string((std::istreambuf_iterator<char>(file)),
         std::istreambuf_iterator<char>());
     PricingEngineConfig config = parseXml(file_str);
+    // PricingEngineConfig* config = new PricingEngineConfig();
 
     return config;
 }
