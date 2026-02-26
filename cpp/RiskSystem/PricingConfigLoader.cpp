@@ -21,12 +21,9 @@ PricingEngineConfig PricingConfigLoader::parseXml(const std::string& content)
 
     pugi::xml_node root = doc.document_element();
 
-    std::vector<PricingEngineConfigItem> items {};
+    PricingEngineConfig config;
 
     for (auto child : root.children()) {
-        // <Engine tradeType="FxSpot" assembly="HmxLabs.TechTest.Pricers"
-        // pricingEngine="HmxLabs.TechTest.Pricers.FxPricingEngine" />
-
         const char* tradeType = child.attribute("tradeType").as_string();
         const char* assembly = child.attribute("assembly").as_string();
         const char* typeName = child.attribute("pricingEngine").as_string();
@@ -35,10 +32,8 @@ PricingEngineConfig PricingConfigLoader::parseXml(const std::string& content)
         item.setTradeType(tradeType);
         item.setAssembly(assembly);
         item.setTypeName(typeName);
-        items.push_back(item);
+        config.push_back(item);
     }
-
-    PricingEngineConfig config(items);
 
     return config;
 }
