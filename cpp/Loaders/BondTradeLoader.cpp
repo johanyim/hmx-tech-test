@@ -23,20 +23,32 @@ BondTrade* BondTradeLoader::createTradeFromLine(std::string line)
         throw std::runtime_error("Invalid line format");
     }
 
+    // TODO: maybe the while loop can be changed to explicitly name each
+    // parameter by index
+
+    // Type,TradeDate,Instrument,Counterparty,Notional,Rate,TradeId
+    std::string type = items[0];
+    std::string trade_date = items[1];
+    std::string instrument = items[2];
+    std::string counterparty = items[3];
+    std::string notional = items[4];
+    std::string rate = items[5];
+    std::string trade_id = items[6];
+
     // missing argument
-    BondTrade* trade = new BondTrade(items[6], items[0]);
+    BondTrade* trade = new BondTrade(trade_id, type);
 
     std::tm tm = {};
-    std::istringstream dateStream(items[1]);
+    std::istringstream dateStream(trade_date);
     dateStream >> std::get_time(&tm, "%Y-%m-%d");
     auto timePoint = std::chrono::system_clock::from_time_t(std::mktime(&tm));
 
     trade->setTradeDate(timePoint);
 
-    trade->setInstrument(items[2]);
-    trade->setCounterparty(items[3]);
-    trade->setNotional(std::stod(items[4]));
-    trade->setRate(std::stod(items[5]));
+    trade->setInstrument(instrument);
+    trade->setCounterparty(counterparty);
+    trade->setNotional(std::stod(notional));
+    trade->setRate(std::stod(rate));
 
     return trade;
 }

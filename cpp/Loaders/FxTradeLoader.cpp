@@ -21,23 +21,35 @@ FxTrade* FxTradeLoader::createTradeFromLine(std::string line)
         throw std::runtime_error("Invalid line format");
     }
 
+// Type¬TradeDate¬Ccy1¬Ccy2¬Amount¬Rate¬ValueDate¬Counterparty¬TradeId
+// easier to be explicit with names
+#define type items[0]
+#define trade_date items[1]
+#define ccy1 items[2]
+#define ccy2 items[3]
+#define amount items[4]
+#define rate items[5]
+#define value_date items[6]
+#define counterparty items[7]
+#define trade_id items[8]
+
     // missing argument
-    FxTrade* trade = new FxTrade(items[6], items[0]);
+    FxTrade* trade = new FxTrade(trade_id, type);
 
     std::tm tm = {};
-    std::istringstream dateStream(items[1]);
+    std::istringstream dateStream(trade_date);
     dateStream >> std::get_time(&tm, "%Y-%m-%d");
     auto timePoint = std::chrono::system_clock::from_time_t(std::mktime(&tm));
 
     trade->setTradeDate(timePoint);
 
-    trade->setInstrument(items[2] + items[3]);
-    trade->setCounterparty(items[7]);
-    trade->setNotional(std::stod(items[4]));
-    trade->setRate(std::stod(items[5]));
+    trade->setInstrument(ccy1 + ccy2);
+    trade->setCounterparty(counterparty);
+    trade->setNotional(std::stod(amount));
+    trade->setRate(std::stod(rate));
 
     std::tm vdBuf = {};
-    std::istringstream valueDateStream(items[6]);
+    std::istringstream valueDateStream(value_date);
     valueDateStream >> std::get_time(&vdBuf, "%Y-%m-%d");
 
     auto valueDate

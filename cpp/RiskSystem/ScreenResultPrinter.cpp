@@ -5,6 +5,7 @@ void ScreenResultPrinter::printResults(ScalarResults& results)
 {
     for (const auto& result : results) {
         std::string tradeId = result.getTradeId();
+
         std::optional<double> ok = result.getResult();
         auto ok_str = ok.has_value() ? std::format(" : {}", ok.value()) : "";
 
