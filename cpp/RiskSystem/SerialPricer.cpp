@@ -37,14 +37,12 @@ public:
 private:
     NameResolver()
     {
-        // #define RESOLVE_NAME(Type)                                                     \
-//     resolver_.emplace(                                                         \
-//         "HmxLabs.TechTest.Pricers." #Type, std::make_shared<Type>())
-
 #define RESOLVE_NAME(Type)                                                     \
     resolver_.emplace("HmxLabs.TechTest.Pricers." #Type,                       \
         []() { return std::make_unique<Type>(); })
 
+        // DISCUSSION: This solution would imply that every Engine type needs to
+        // be registered here. Perhaps it could belong in a separate config?
         // expands to register names of engine
         RESOLVE_NAME(GovBondPricingEngine);
         RESOLVE_NAME(CorpBondPricingEngine);
