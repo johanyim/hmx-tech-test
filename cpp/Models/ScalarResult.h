@@ -1,7 +1,9 @@
 #ifndef SCALARRESULT_H
 #define SCALARRESULT_H
 
+#include <iostream>
 #include <optional>
+#include <ostream>
 #include <stdexcept>
 #include <string>
 

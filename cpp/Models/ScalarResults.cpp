@@ -45,26 +45,6 @@ void ScalarResults::addError(
     errors_[tradeId] = error;
 }
 
-ScalarResults::Iterator& ScalarResults::Iterator::operator++()
-{
-    // advance the iterator depending on the state of the inner iterators
-    if (it1_ == end1_) {
-        it2_++;
-    } else if (it2_ == end2_) {
-        it1_++;
-    } else if (it1_->first < it2_->first) {
-        it1_++;
-    } else if (it2_->first < it1_->first) {
-        it2_++;
-    } else {
-        // it1_->first == it2_->first
-        it1_++;
-        it2_++;
-    }
-
-    return *this;
-}
-
 ScalarResult ScalarResults::Iterator::operator*() const
 {
 
@@ -90,6 +70,26 @@ ScalarResult ScalarResults::Iterator::operator*() const
     throw std::logic_error(
         "ScalarResult Iterator reached an invalid state, the iterator indexed "
         "a key which did not have either a result nor an error");
+}
+
+ScalarResults::Iterator& ScalarResults::Iterator::operator++()
+{
+    // advance the iterator depending on the state of the inner iterators
+    if (it1_ == end1_) {
+        it2_++;
+    } else if (it2_ == end2_) {
+        it1_++;
+    } else if (it1_->first < it2_->first) {
+        it1_++;
+    } else if (it2_->first < it1_->first) {
+        it2_++;
+    } else {
+        // it1_->first == it2_->first
+        it1_++;
+        it2_++;
+    }
+
+    return *this;
 }
 
 bool ScalarResults::Iterator::operator!=(const Iterator& other) const

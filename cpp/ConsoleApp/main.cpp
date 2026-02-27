@@ -36,6 +36,7 @@ int main(int argc, char* argv[])
 
     ScalarResults results;
     SerialPricer pricer;
+
     pricer.price(allTrades, &results);
 
     ScreenResultPrinter screenPrinter;
