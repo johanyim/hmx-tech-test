@@ -31,7 +31,7 @@ inline std::vector<std::string> split(
         start = pos + delimiter.length();
     }
 
-    tokens.push_back(s.substr(start));
+    tokens.push_back(trim(s.substr(start)));
     return tokens;
 }
 

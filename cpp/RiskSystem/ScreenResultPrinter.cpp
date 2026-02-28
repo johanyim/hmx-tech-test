@@ -1,4 +1,5 @@
 #include "ScreenResultPrinter.h"
+#include "Loaders/LoaderUtils.h"
 #include <iostream>
 
 void ScreenResultPrinter::printResults(ScalarResults& results)
@@ -13,6 +14,6 @@ void ScreenResultPrinter::printResults(ScalarResults& results)
         auto error_str
             = error.has_value() ? std::format(" : {}", error.value()) : "";
 
-        std::cout << tradeId << ok_str << error_str << std::endl;
+        std::cout << tradeId << ok_str << error_str << '\n';
     }
 }

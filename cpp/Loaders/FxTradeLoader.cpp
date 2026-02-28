@@ -21,17 +21,17 @@ FxTrade* FxTradeLoader::createTradeFromLine(std::string line)
         throw std::runtime_error("Invalid line format");
     }
 
-// Type¬TradeDate¬Ccy1¬Ccy2¬Amount¬Rate¬ValueDate¬Counterparty¬TradeId
-// easier to be explicit with names
-#define type items[0]
-#define trade_date items[1]
-#define ccy1 items[2]
-#define ccy2 items[3]
-#define amount items[4]
-#define rate items[5]
-#define value_date items[6]
-#define counterparty items[7]
-#define trade_id items[8]
+    // Type¬TradeDate¬Ccy1¬Ccy2¬Amount¬Rate¬ValueDate¬Counterparty¬TradeId
+    // explicit names
+    std::string type = items[0];
+    std::string trade_date = items[1];
+    std::string ccy1 = items[2];
+    std::string ccy2 = items[3];
+    std::string amount = items[4];
+    std::string rate = items[5];
+    std::string value_date = items[6];
+    std::string counterparty = items[7];
+    std::string trade_id = items[8];
 
     // missing argument
     FxTrade* trade = new FxTrade(trade_id, type);
