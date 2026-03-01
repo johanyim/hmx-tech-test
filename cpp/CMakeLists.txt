@@ -66,6 +66,8 @@ add_library(RiskSystem
     RiskSystem/ParallelPricer.cpp
     RiskSystem/ScreenResultPrinter.h
     RiskSystem/ScreenResultPrinter.cpp
+
+    RiskSystem/NameResolver.h
 )
 
 target_include_directories(RiskSystem PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

@@ -2,17 +2,15 @@
 #include "../Loaders/BondTradeLoader.h"
 #include "../Loaders/FxTradeLoader.h"
 
-std::vector<ITradeLoader*> SerialTradeLoader::getTradeLoaders()
+std::vector<std::unique_ptr<ITradeLoader>> SerialTradeLoader::getTradeLoaders()
 {
-    std::vector<ITradeLoader*> loaders;
+    std::vector<std::unique_ptr<ITradeLoader>> loaders;
 
-    BondTradeLoader* bondLoader = new BondTradeLoader();
-    bondLoader->setDataFile("TradeData/BondTrades.dat");
-    loaders.push_back(bondLoader);
+    loaders.push_back(std::make_unique<BondTradeLoader>());
+    loaders.back()->setDataFile("TradeData/BondTrades.dat");
 
-    FxTradeLoader* fxLoader = new FxTradeLoader();
-    fxLoader->setDataFile("TradeData/FxTrades.dat");
-    loaders.push_back(fxLoader);
+    loaders.push_back(std::make_unique<FxTradeLoader>());
+    loaders.back()->setDataFile("TradeData/FxTrades.dat");
 
     return loaders;
 }
@@ -22,7 +20,7 @@ std::vector<std::vector<ITrade*>> SerialTradeLoader::loadTrades()
     auto loaders = getTradeLoaders();
     std::vector<std::vector<ITrade*>> result;
 
-    for (auto loader : loaders) {
+    for (const auto& loader : loaders) {
         result.push_back(loader->loadTrades());
     }
 

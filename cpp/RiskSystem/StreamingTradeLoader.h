@@ -11,9 +11,9 @@
 
 class StreamingTradeLoader {
 private:
-    std::map<std::string, IPricingEngine*> pricers_;
+    std::map<std::string, std::unique_ptr<IPricingEngine>> pricers_;
 
-    std::vector<ITradeLoader*> getTradeLoaders();
+    std::vector<std::unique_ptr<ITradeLoader>> getTradeLoaders();
     void loadPricers();
 
 public:

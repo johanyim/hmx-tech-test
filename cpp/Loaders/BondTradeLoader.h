@@ -19,6 +19,7 @@ private:
 
 public:
     std::vector<ITrade*> loadTrades() override;
+    // void streamTrades(std::function<void(const ITrade&)> onTrade) override;
     std::string getDataFile() const override;
     void setDataFile(const std::string& file) override;
 };
