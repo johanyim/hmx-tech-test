@@ -100,3 +100,31 @@ std::vector<ITrade*> FxTradeLoader::loadTrades()
 std::string FxTradeLoader::getDataFile() const { return dataFile_; }
 
 void FxTradeLoader::setDataFile(const std::string& file) { dataFile_ = file; }
+
+void FxTradeLoader::streamTrades(std::function<void(const ITrade&)> onTrade)
+{
+
+    // NOTE: copy of loadTradesFromFile implementation
+    // TODO: datafile validation could be coupled
+    if (dataFile_.empty()) {
+        throw std::invalid_argument("Filename cannot be null");
+    }
+
+    std::ifstream stream(dataFile_);
+    if (!stream.is_open()) {
+        throw std::runtime_error("Cannot open file: " + dataFile_);
+    }
+
+    int lineCount = 0;
+    std::string line;
+    while (std::getline(stream, line)) {
+        // if (lineCount < 2) {
+        // // TODO: lineCount still hasn't been changed to
+        // handle this
+        if (lineCount < 2 || lineCount > 5) {
+        } else {
+            onTrade(*createTradeFromLine(line));
+        }
+        lineCount++;
+    }
+}
