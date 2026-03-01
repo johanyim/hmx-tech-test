@@ -14,7 +14,7 @@ private:
     static constexpr char separator[] = "¬";
     std::string dataFile_;
 
-    FxTrade* createTradeFromLine(std::string line);
+    std::optional<FxTrade*> createTradeFromLine(std::string line);
     void loadTradesFromFile(std::string filename, FxTradeList& tradeList);
 
 public:

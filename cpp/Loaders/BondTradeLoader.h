@@ -14,7 +14,7 @@ private:
     static constexpr char separator = ',';
     std::string dataFile_;
 
-    BondTrade* createTradeFromLine(std::string line);
+    std::optional<BondTrade*> createTradeFromLine(std::string line);
     void loadTradesFromFile(std::string filename, BondTradeList& tradeList);
 
 public:

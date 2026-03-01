@@ -8,7 +8,7 @@
 #include <sstream>
 #include <stdexcept>
 
-BondTrade* BondTradeLoader::createTradeFromLine(std::string line)
+std::optional<BondTrade*> BondTradeLoader::createTradeFromLine(std::string line)
 {
     std::vector<std::string> items;
     std::istringstream record_stream(line);
@@ -20,37 +20,46 @@ BondTrade* BondTradeLoader::createTradeFromLine(std::string line)
     }
 
     if (items.size() < 7) {
-        throw std::runtime_error("Invalid line format");
+        // throw std::runtime_error("Invalid line format");
+        std::cerr << "Invalid line format" << '\n';
+        return std::nullopt;
     }
 
     // TODO: maybe the while loop can be changed to explicitly name each
     // parameter by index
 
-    // Type,TradeDate,Instrument,Counterparty,Notional,Rate,TradeId
-    std::string type = items[0];
-    std::string trade_date = items[1];
-    std::string instrument = items[2];
-    std::string counterparty = items[3];
-    std::string notional = items[4];
-    std::string rate = items[5];
-    std::string trade_id = items[6];
+    try {
 
-    // missing argument
-    BondTrade* trade = new BondTrade(trade_id, type);
+        // Type,TradeDate,Instrument,Counterparty,Notional,Rate,TradeId
+        std::string type = items[0];
+        std::string trade_date = items[1];
+        std::string instrument = items[2];
+        std::string counterparty = items[3];
+        std::string notional = items[4];
+        std::string rate = items[5];
+        std::string trade_id = items[6];
 
-    std::tm tm = {};
-    std::istringstream dateStream(trade_date);
-    dateStream >> std::get_time(&tm, "%Y-%m-%d");
-    auto timePoint = std::chrono::system_clock::from_time_t(std::mktime(&tm));
+        // missing argument
+        BondTrade* trade = new BondTrade(trade_id, type);
 
-    trade->setTradeDate(timePoint);
+        std::tm tm = {};
+        std::istringstream dateStream(trade_date);
+        dateStream >> std::get_time(&tm, "%Y-%m-%d");
+        auto timePoint
+            = std::chrono::system_clock::from_time_t(std::mktime(&tm));
 
-    trade->setInstrument(instrument);
-    trade->setCounterparty(counterparty);
-    trade->setNotional(std::stod(notional));
-    trade->setRate(std::stod(rate));
+        trade->setTradeDate(timePoint);
 
-    return trade;
+        trade->setInstrument(instrument);
+        trade->setCounterparty(counterparty);
+        trade->setNotional(std::stod(notional));
+        trade->setRate(std::stod(rate));
+
+        return trade;
+
+    } catch (...) {
+        return std::nullopt;
+    }
 }
 
 void BondTradeLoader::loadTradesFromFile(
@@ -69,9 +78,15 @@ void BondTradeLoader::loadTradesFromFile(
     std::string line;
     while (std::getline(stream, line)) {
         if (lineCount == 0) {
-        } else {
-            tradeList.add(createTradeFromLine(line));
+            continue;
         }
+
+        auto trade = createTradeFromLine(line);
+        if (!trade) {
+            break;
+        }
+
+        tradeList.add(trade.value());
         lineCount++;
     }
 }
@@ -109,13 +124,16 @@ void BondTradeLoader::streamTrades(std::function<void(const ITrade&)> onTrade)
     int lineCount = 0;
     std::string line;
     while (std::getline(stream, line)) {
-        // if (lineCount < 2) {
-        // // TODO: lineCount still hasn't been changed to
-        // handle this
-        if (lineCount < 2 || lineCount > 5) {
-        } else {
-            onTrade(*createTradeFromLine(line));
+        if (lineCount == 0) {
+            continue;
         }
+
+        auto trade = createTradeFromLine(line);
+        if (!trade) {
+            break;
+        }
+
+        onTrade(*trade.value());
         lineCount++;
     }
 }
