@@ -45,43 +45,32 @@ StreamingTradeLoader::~StreamingTradeLoader() { }
 void StreamingTradeLoader::loadAndPrice(IScalarResultReceiver* resultReceiver)
 {
 
-    // pricers_.end()->second.getTradeLoaders();
-
-    // NOTE: reference SerialPricer.cpp
-    // for (const auto& tradeContainer : tradeContainers) {
-    //     for (ITrade* trade : tradeContainer) {
-    //         std::string tradeType = trade->getTradeType();
-    //         if (pricers_.find(tradeType) == pricers_.end()) {
-    //             resultReceiver->addError(trade->getTradeId(),
-    //                 "No Pricing Engines available for this trade type");
-    //             continue;
-    //         }
-    //         IPricingEngine* pricer = pricers_[tradeType].get();
-    //         pricer->price(trade, resultReceiver);
-    //     }
-    // }
-
     loadPricers();
     std::vector<std::unique_ptr<ITradeLoader>> loaders = getTradeLoaders();
-    // std::vector<std::unique_ptr<IPricingEngine>> pricers = loadPricers();
 
     for (const auto& loader : loaders) {
-        auto trades = loader->loadTrades();
+        std::cout << "loader" << '\n';
+        // ERROR:
+        // // WRONG:  can't store trades in a variable
+        // auto trades = loader->loadTrades();
 
-        // std::string tradeType = configItem.getTradeType();
-        // std::string typeName = configItem.getTypeName();
-        // pricers_.emplace(tradeType,
-        // NameResolver::instance().create(typeName));
+        loader->streamTrades(
 
-        for (const auto& trade : trades) {
-            std::string tradeType = trade->getTradeType();
-            IPricingEngine* pricer = pricers_[tradeType].get();
-            if (!pricer) {
-                std::cerr << "No pricer was found for the tradeType: "
-                          << tradeType << '\n';
-                continue;
+            [this, resultReceiver](const ITrade& trade) {
+                const std::string& tradeType = trade.getTradeType();
+
+                auto it = this->pricers_.find(tradeType);
+                if (it == this->pricers_.end()) {
+                    std::cerr
+                        << "No pricer was found for tradeType: " << tradeType
+                        << '\n';
+                    return;
+                }
+
+                IPricingEngine* pricer = it->second.get();
+                pricer->price(&trade, resultReceiver);
             }
-            pricer->price(trade, resultReceiver);
-        }
+
+        );
     }
 }

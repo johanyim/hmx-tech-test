@@ -78,6 +78,7 @@ void BondTradeLoader::loadTradesFromFile(
     std::string line;
     while (std::getline(stream, line)) {
         if (lineCount == 0) {
+            lineCount++;
             continue;
         }
 
@@ -125,6 +126,7 @@ void BondTradeLoader::streamTrades(std::function<void(const ITrade&)> onTrade)
     std::string line;
     while (std::getline(stream, line)) {
         if (lineCount == 0) {
+            lineCount++;
             continue;
         }
 

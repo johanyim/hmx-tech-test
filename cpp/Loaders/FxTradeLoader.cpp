@@ -84,6 +84,7 @@ void FxTradeLoader::loadTradesFromFile(
     std::string line;
     while (std::getline(stream, line)) {
         if (lineCount < 2) {
+            lineCount++;
             continue;
         }
 
@@ -128,6 +129,7 @@ void FxTradeLoader::streamTrades(std::function<void(const ITrade&)> onTrade)
     std::string line;
     while (std::getline(stream, line)) {
         if (lineCount < 2) {
+            lineCount++;
             continue;
         }
 

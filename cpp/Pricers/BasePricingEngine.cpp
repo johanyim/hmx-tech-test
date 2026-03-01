@@ -13,7 +13,7 @@ BasePricingEngine::BasePricingEngine()
 }
 
 void BasePricingEngine::price(
-    ITrade* trade, IScalarResultReceiver* resultReceiver)
+    const ITrade* trade, IScalarResultReceiver* resultReceiver)
 {
     if (resultReceiver == nullptr) {
         throw std::invalid_argument("resultReceiver_");
@@ -41,7 +41,7 @@ int BasePricingEngine::getDelay() const { return delay_; }
 void BasePricingEngine::setDelay(int delay) { delay_ = delay; }
 
 void BasePricingEngine::priceTrade(
-    ITrade* trade, IScalarResultReceiver* resultReceiver)
+    const ITrade* trade, IScalarResultReceiver* resultReceiver)
 {
     if (!isTradeTypeSupported(trade->getTradeType())) {
         if (trade->getTradeId().empty()) {
